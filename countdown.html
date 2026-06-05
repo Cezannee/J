@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown to Jessica's Day</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="particle-container"></div>
+
+    <main class="book-page">
+        <section id="countdown" class="section-countdown page-section">
+            <div class="container">
+                <h2 class="scramble-text">Counting Down to Your Special Moment</h2>
+                <p class="scramble-text">Time keeps moving, but this feeling stays timeless.</p>
+                <div class="timer-display">
+                    <div class="timer-box">
+                        <span id="days">00</span>
+                        <label>Days</label>
+                    </div>
+                    <div class="timer-box">
+                        <span id="hours">00</span>
+                        <label>Hours</label>
+                    </div>
+                    <div class="timer-box">
+                        <span id="minutes">00</span>
+                        <label>Minutes</label>
+                    </div>
+                    <div class="timer-box">
+                        <span id="seconds">00</span>
+                        <label>Seconds</label>
+                    </div>
+                </div>
+                <div id="countdown-complete" class="countdown-complete" aria-live="polite">
+                    <span class="complete-kicker">The wait is over</span>
+                    <h3>Happy Birthday, Jessy</h3>
+                    <p>Today is yours. Run freely, shine softly, and let every beautiful dream begin its next chapter.</p>
+                </div>
+                <div class="timer-callback-panel" aria-label="Countdown completion status">
+                    <div class="callback-box">
+                        <span class="callback-label">completed</span>
+                        <span id="complete-status" class="callback-value">false</span>
+                    </div>
+                    <div class="callback-box">
+                        <span class="callback-label">current time</span>
+                        <span id="current-time-status" class="callback-value">0</span>
+                    </div>
+                </div>
+            </div>
+            <button class="page-next" type="button" data-next="quote.html" aria-label="Go to quote">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+            </button>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

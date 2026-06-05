@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="app-shell">
+    <iframe id="page-frame" class="page-frame" title="Birthday page"></iframe>
+    <iframe id="music-frame" class="music-frame is-hidden" src="music.html" title="Music player" allow="autoplay"></iframe>
+
+    <script>
+        const pageFrame = document.getElementById("page-frame");
+        const musicFrame = document.getElementById("music-frame");
+        const allowedPages = new Set([
+            "countdown.html",
+            "quote.html",
+            "home.html",
+            "journey.html",
+            "gallery.html",
+            "surprise.html"
+        ]);
+
+        const requestedPage = new URLSearchParams(window.location.search).get("page");
+        const initialPage = allowedPages.has(requestedPage) ? requestedPage : "countdown.html";
+        let activePage = initialPage;
+        pageFrame.src = initialPage;
+        setMusicAvailability(initialPage);
+
+        function setMusicAvailability(pageUrl) {
+            activePage = pageUrl;
+            const isCountdown = pageUrl.endsWith("countdown.html");
+            musicFrame.classList.toggle("is-hidden", isCountdown);
+            musicFrame.contentWindow?.postMessage({
+                type: isCountdown ? "birthday:music-pause" : "birthday:music-play"
+            }, "*");
+        }
+
+        window.addEventListener("message", function(event) {
+            if (!event.data || event.data.type !== "birthday:navigate") {
+                return;
+            }
+
+            const nextPage = event.data.href;
+            setMusicAvailability(nextPage);
+            pageFrame.src = nextPage;
+        });
+
+        pageFrame.addEventListener("load", function() {
+            try {
+                const currentPage = pageFrame.contentWindow?.location.pathname.split("/").pop() || initialPage;
+                setMusicAvailability(currentPage);
+            } catch (error) {
+                setMusicAvailability(initialPage);
+            }
+        });
+
+        musicFrame.addEventListener("load", function() {
+            setMusicAvailability(activePage);
+        });
+    </script>
+</body>
+</html>

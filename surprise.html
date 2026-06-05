@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Message</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="particle-container"></div>
+
+    <main class="book-page">
+        <section id="surprise" class="section-surprise page-section">
+            <div class="container">
+                <div class="surprise-box-wrapper">
+                    <h2>Secret Message Box</h2>
+                    <p>Tap the button below 打开信.</p>
+
+                    <div class="interactive-area">
+                        <button id="btn-unlock" class="btn btn-primary btn-bounce">Open Love Letter</button>
+                    </div>
+
+                    <div id="secret-letter" class="secret-letter hidden">
+                        <div class="letter-header">
+                            <span class="horseshoe-gold">我的英语不太好，希望您能原谅</span>
+                            <h3>It is a love letter i guess?</h3>
+                        </div>
+                        <div class="letter-body">
+                            <p>To my favorite person, Jessica,</p>
+                            <p>Out of all the timelines, universes, and alternate realities, I am just so endlessly glad that I get to exist in this one with you.</p>
+                            <p>John Green once wrote, "I fell in love the way you fall asleep: slowly, and then all at once." That is exactly how it happened for me. You sneaked into my life, turning ordinary moments into something extraordinary, and before I even realized it, you had become my absolute favorite part of every single day.</p>
+                            <p>You have this incredible way of making the world feel lighter. I love the way your mind works, the way you laugh with your whole heart, and the way you make even the quietest moments feel like an adventure. In the story of my life, meeting you was the greatest plot twist I could have ever asked for.</p>
+                            <p>Today is all about celebrating you—the person who makes everything better just by being in it. I hope this year brings you as much happiness, clarity, and peace as you bring to me. I promise to be here to celebrate your victories, hold your hand through the messy parts, and love you more with every passing chapter.</p>
+                            <p>Happy Birthday, my dear. Here is to you, to us, and to whatever beautiful mess comes next.</p>
+                            <p class="signature">Endlessly yours,</p>
+                            <p class="signature-name">Cezanne</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="page-nav page-prev" type="button" data-prev="gallery.html" aria-label="Go back to photo gallery">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M19 12H5M11 6l-6 6 6 6" />
+                </svg>
+            </button>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Made with love for Jessica Special Day &copy; Cezanne</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { animateLetterBody, prepareLetterBody } from "./letter-animation.js";
+
+        window.animateLetterBody = animateLetterBody;
+        window.prepareLetterBody = prepareLetterBody;
+        window.dispatchEvent(new Event("letter-animation-ready"));
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

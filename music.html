@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="music-widget-page">
+    <div class="floating-music-bar">
+        <audio class="floating-audio" src="music/lagu1.mp3" loop preload="auto"></audio>
+        <button class="mute-toggle" type="button" aria-label="Mute music" aria-pressed="false">
+            <span class="sound-on">&#9834;</span>
+            <span class="sound-off">&times;</span>
+        </button>
+    </div>
+
+    <script>
+        const audio = document.querySelector(".floating-audio");
+        const button = document.querySelector(".mute-toggle");
+
+        function updateButton() {
+            button.classList.toggle("is-muted", audio.muted);
+            button.setAttribute("aria-label", audio.muted ? "Unmute music" : "Mute music");
+            button.setAttribute("aria-pressed", audio.muted ? "true" : "false");
+        }
+
+        const savedMuted = localStorage.getItem("birthdayMusicMuted");
+        audio.muted = savedMuted === null ? true : savedMuted === "true";
+        updateButton();
+
+        function startMusic() {
+            audio.play().catch(() => {
+                audio.muted = true;
+                updateButton();
+                audio.play().catch(() => {
+                    // Some browsers require clicking the music button once before audio can start.
+                });
+            });
+        }
+
+        window.addEventListener("message", function(event) {
+            if (!event.data) {
+                return;
+            }
+
+            if (event.data.type === "birthday:music-play") {
+                startMusic();
+            }
+
+            if (event.data.type === "birthday:music-pause") {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        });
+
+        button.addEventListener("click", function() {
+            audio.muted = !audio.muted;
+            localStorage.setItem("birthdayMusicMuted", audio.muted ? "true" : "false");
+            updateButton();
+            startMusic();
+        });
+    </script>
+</body>
+</html>
