@@ -29,7 +29,13 @@
         audio.muted = savedMuted === null ? true : savedMuted === "true";
         updateButton();
 
-        function startMusic() {
+        function startMusic(options = {}) {
+            if (options.audible) {
+                audio.muted = false;
+                localStorage.setItem("birthdayMusicMuted", "false");
+                updateButton();
+            }
+
             audio.play().catch(() => {
                 audio.muted = true;
                 updateButton();
@@ -45,7 +51,9 @@
             }
 
             if (event.data.type === "birthday:music-play") {
-                startMusic();
+                startMusic({
+                    audible: event.data.audible === true
+                });
             }
 
             if (event.data.type === "birthday:music-pause") {

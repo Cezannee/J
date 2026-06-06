@@ -115,6 +115,12 @@ function completeCountdown() {
         runScrambleText(completeMessage.querySelector("h3"), 240);
     }
 
+    if (window.parent && window.parent !== window) {
+        window.parent.postMessage({
+            type: "birthday:countdown-complete"
+        }, "*");
+    }
+
     try {
         localStorage.setItem("countdownCompleted", "true");
         window.dispatchEvent(new CustomEvent('countdown:complete'));

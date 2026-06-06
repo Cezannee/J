@@ -25,26 +25,57 @@
         const requestedPage = new URLSearchParams(window.location.search).get("page");
         const initialPage = allowedPages.has(requestedPage) ? requestedPage : "countdown.html";
         let activePage = initialPage;
+        let countdownMusicUnlocked = false;
+        let pendingAudibleMusicStart = false;
         pageFrame.src = initialPage;
         setMusicAvailability(initialPage);
 
         function setMusicAvailability(pageUrl) {
             activePage = pageUrl;
             const isCountdown = pageUrl.endsWith("countdown.html");
-            musicFrame.classList.toggle("is-hidden", isCountdown);
+            const shouldPlayMusic = !isCountdown || countdownMusicUnlocked;
+            const playAudibly = shouldPlayMusic && pendingAudibleMusicStart;
+
+            musicFrame.classList.toggle("is-hidden", !shouldPlayMusic);
             musicFrame.contentWindow?.postMessage({
-                type: isCountdown ? "birthday:music-pause" : "birthday:music-play"
+                type: shouldPlayMusic ? "birthday:music-play" : "birthday:music-pause",
+                audible: playAudibly
             }, "*");
+
+            if (playAudibly) {
+                pendingAudibleMusicStart = false;
+            }
         }
 
         window.addEventListener("message", function(event) {
-            if (!event.data || event.data.type !== "birthday:navigate") {
+            if (!event.data) {
                 return;
             }
 
-            const nextPage = event.data.href;
-            setMusicAvailability(nextPage);
-            pageFrame.src = nextPage;
+            if (event.data.type === "birthday:countdown-complete") {
+                countdownMusicUnlocked = true;
+                pendingAudibleMusicStart = true;
+                if (activePage.endsWith("countdown.html")) {
+                    setMusicAvailability(activePage);
+                }
+                return;
+            }
+
+            if (event.data.type === "birthday:navigate") {
+                const nextPage = event.data.href;
+
+                if (!allowedPages.has(nextPage)) {
+                    return;
+                }
+
+                if (nextPage.endsWith("countdown.html")) {
+                    countdownMusicUnlocked = false;
+                    pendingAudibleMusicStart = false;
+                }
+
+                setMusicAvailability(nextPage);
+                pageFrame.src = nextPage;
+            }
         });
 
         pageFrame.addEventListener("load", function() {
